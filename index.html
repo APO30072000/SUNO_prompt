@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Lofi Prompt Generator</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#111;
+color:white;
+padding:40px;
+}
+
+select,button{
+padding:10px;
+margin:5px;
+width:260px;
+font-size:16px;
+}
+
+textarea{
+width:100%;
+height:150px;
+margin-top:20px;
+font-size:16px;
+}
+
+button{
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>LOFI PROMPT GENERATOR</h2>
+
+<select id="genre"></select><br>
+<select id="instrument"></select><br>
+<select id="drum"></select><br>
+<select id="texture"></select><br>
+<select id="ambience"></select><br>
+<select id="tempo"></select><br>
+<select id="purpose"></select><br>
+
+<button onclick="generatePrompt()">Generate Prompt</button>
+<button onclick="randomPrompt()">Random Prompt</button>
+
+<textarea id="result"></textarea>
+
+<script>
+
+const genre=[
+"lofi chill beat",
+"lofi hip hop beat",
+"jazzy lofi beat",
+"ambient lofi beat",
+"dreamy lofi beat"
+]
+
+const instrument=[
+"soft piano",
+"electric piano",
+"mellow guitar",
+"rhodes piano",
+"lofi synth pad",
+"acoustic guitar"
+]
+
+const drum=[
+"soft boom bap drum",
+"dusty hip hop drum",
+"minimal chill drum",
+"warm analog drum",
+"light jazz drum groove"
+]
+
+const texture=[
+"vinyl crackle",
+"tape saturation",
+"warm analog texture",
+"dusty cassette sound",
+"vintage lofi filter"
+]
+
+const ambience=[
+"rain ambience",
+"night city ambience",
+"coffee shop ambience",
+"fireplace ambience",
+"forest ambience",
+"ocean wave ambience"
+]
+
+const tempo=[
+"slow tempo 60 bpm",
+"chill tempo 70 bpm",
+"relaxed tempo 75 bpm",
+"smooth tempo 80 bpm"
+]
+
+const purpose=[
+"studying",
+"relaxing",
+"sleeping",
+"reading",
+"focus work"
+]
+
+function loadSelect(id,data){
+
+let select=document.getElementById(id)
+
+data.forEach(item=>{
+let option=document.createElement("option")
+option.value=item
+option.text=item
+select.appendChild(option)
+})
+
+}
+
+loadSelect("genre",genre)
+loadSelect("instrument",instrument)
+loadSelect("drum",drum)
+loadSelect("texture",texture)
+loadSelect("ambience",ambience)
+loadSelect("tempo",tempo)
+loadSelect("purpose",purpose)
+
+function generatePrompt(){
+
+let g=document.getElementById("genre").value
+let i=document.getElementById("instrument").value
+let d=document.getElementById("drum").value
+let t=document.getElementById("texture").value
+let a=document.getElementById("ambience").value
+let te=document.getElementById("tempo").value
+let p=document.getElementById("purpose").value
+
+let prompt=`${g} instrumental lofi beat,
+${i} melody,
+${d} groove,
+${t},
+${a},
+${te},
+background music for ${p},
+no vocals`
+
+document.getElementById("result").value=prompt
+
+}
+
+function randomItem(arr){
+return arr[Math.floor(Math.random()*arr.length)]
+}
+
+function randomPrompt(){
+
+let prompt=`${randomItem(genre)} instrumental lofi beat,
+${randomItem(instrument)} melody,
+${randomItem(drum)} groove,
+${randomItem(texture)},
+${randomItem(ambience)},
+${randomItem(tempo)},
+background music for ${randomItem(purpose)},
+no vocals`
+
+document.getElementById("result").value=prompt
+
+}
+
+</script>
+
+</body>
+</html>
