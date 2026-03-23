@@ -2,10 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Lofi Prompt Generator</title>
+<title>Lofi Prompt Generator PRO</title>
 
 <style>
-
 body{
 font-family:Arial;
 background:#111;
@@ -18,160 +17,241 @@ padding:10px;
 margin:5px;
 width:260px;
 font-size:16px;
+border-radius:6px;
+border:none;
 }
 
 textarea{
 width:100%;
-height:150px;
+height:220px;
 margin-top:20px;
-font-size:16px;
+font-size:15px;
+background:#000;
+color:#0f0;
+padding:10px;
 }
 
 button{
 cursor:pointer;
+background:#333;
+color:white;
 }
 
+button:hover{
+background:#555;
+}
 </style>
 
 </head>
 
 <body>
 
-<h2>LOFI PROMPT GENERATOR</h2>
+<h2>🎧 LOFI PROMPT GENERATOR PRO</h2>
 
+<!-- UI TIẾNG VIỆT -->
 <select id="genre"></select><br>
 <select id="instrument"></select><br>
-<select id="drum"></select><br>
-<select id="texture"></select><br>
-<select id="ambience"></select><br>
-<select id="tempo"></select><br>
 <select id="purpose"></select><br>
 
-<button onclick="generatePrompt()">Generate Prompt</button>
-<button onclick="randomPrompt()">Random Prompt</button>
+<button onclick="generatePrompt()">Tạo Prompt</button>
+<button onclick="randomPrompt()">Random Pro</button>
 
 <textarea id="result"></textarea>
 
 <script>
 
-const genre=[
-"lofi chill beat",
-"lofi hip hop beat",
-"jazzy lofi beat",
-"ambient lofi beat",
-"dreamy lofi beat"
-]
+// ===== MAP VIỆT → ANH =====
 
-const instrument=[
-"soft piano",
-"electric piano",
-"mellow guitar",
-"rhodes piano",
-"lofi synth pad",
-"acoustic guitar"
+const genreMap={
+"Lofi chill":"lofi chill beat",
+"Lofi hip hop":"lofi hip hop beat",
+"Lofi jazz":"jazzy lofi beat",
+"Lofi ambient":"ambient lofi beat",
+"Lofi dreamy":"dreamy lofi beat"
+}
+
+const instrumentMap={
+"Piano mềm":"soft piano",
+"Piano điện":"electric piano",
+"Guitar nhẹ":"mellow guitar",
+"Rhodes":"rhodes piano",
+"Synth pad":"lofi synth pad",
+"Guitar acoustic":"acoustic guitar"
+}
+
+const purposeMap={
+"Học tập":"studying",
+"Thư giãn":"relaxing",
+"Ngủ":"sleeping",
+"Đọc sách":"reading",
+"Tập trung":"focus work"
+}
+
+// ===== RANDOM DATA =====
+
+const hook=[
+"simple repeating piano motif",
+"soft emotional chord loop",
+"hypnotic melody loop"
 ]
 
 const drum=[
 "soft boom bap drum",
-"dusty hip hop drum",
 "minimal chill drum",
-"warm analog drum",
 "light jazz drum groove"
 ]
 
 const texture=[
 "vinyl crackle",
 "tape saturation",
-"warm analog texture",
-"dusty cassette sound",
 "vintage lofi filter"
 ]
 
 const ambience=[
 "rain ambience",
-"night city ambience",
 "coffee shop ambience",
-"fireplace ambience",
-"forest ambience",
-"ocean wave ambience"
+"night city ambience"
 ]
 
 const tempo=[
 "slow tempo 60 bpm",
 "chill tempo 70 bpm",
-"relaxed tempo 75 bpm",
 "smooth tempo 80 bpm"
 ]
 
-const purpose=[
-"studying",
-"relaxing",
-"sleeping",
-"reading",
-"focus work"
+const emotion=[
+"nostalgic rainy night",
+"lonely late night thoughts",
+"peaceful calm focus"
 ]
 
+const story=[
+"alone in a small apartment at 2am",
+"watching rain through the window",
+"late night coding session"
+]
+
+// ===== LOAD SELECT =====
+
 function loadSelect(id,data){
-
 let select=document.getElementById(id)
-
-data.forEach(item=>{
+Object.keys(data).forEach(key=>{
 let option=document.createElement("option")
-option.value=item
-option.text=item
+option.value=key
+option.text=key
 select.appendChild(option)
 })
-
 }
 
-loadSelect("genre",genre)
-loadSelect("instrument",instrument)
-loadSelect("drum",drum)
-loadSelect("texture",texture)
-loadSelect("ambience",ambience)
-loadSelect("tempo",tempo)
-loadSelect("purpose",purpose)
+loadSelect("genre",genreMap)
+loadSelect("instrument",instrumentMap)
+loadSelect("purpose",purposeMap)
 
-function generatePrompt(){
+// ===== RANDOM =====
 
-let g=document.getElementById("genre").value
-let i=document.getElementById("instrument").value
-let d=document.getElementById("drum").value
-let t=document.getElementById("texture").value
-let a=document.getElementById("ambience").value
-let te=document.getElementById("tempo").value
-let p=document.getElementById("purpose").value
-
-let prompt=`${g} instrumental lofi beat,
-${i} melody,
-${d} groove,
-${t},
-${a},
-${te},
-background music for ${p},
-no vocals`
-
-document.getElementById("result").value=prompt
-
-}
-
-function randomItem(arr){
+function rand(arr){
 return arr[Math.floor(Math.random()*arr.length)]
 }
 
-function randomPrompt(){
+// ===== SMART LOGIC =====
 
-let prompt=`${randomItem(genre)} instrumental lofi beat,
-${randomItem(instrument)} melody,
-${randomItem(drum)} groove,
-${randomItem(texture)},
-${randomItem(ambience)},
-${randomItem(tempo)},
-background music for ${randomItem(purpose)},
-no vocals`
+function smart(purpose){
+
+if(purpose==="sleeping"){
+return {
+tempo:"slow tempo 60 bpm",
+drum:"minimal chill drum",
+ambience:"rain ambience"
+}
+}
+
+if(purpose==="focus work"){
+return {
+tempo:"smooth tempo 80 bpm",
+drum:"soft boom bap drum",
+ambience:"coffee shop ambience"
+}
+}
+
+return {
+tempo:rand(tempo),
+drum:rand(drum),
+ambience:rand(ambience)
+}
+}
+
+// ===== GENERATE =====
+
+function generatePrompt(){
+
+let genreVI=document.getElementById("genre").value
+let instrumentVI=document.getElementById("instrument").value
+let purposeVI=document.getElementById("purpose").value
+
+let g=genreMap[genreVI]
+let i=instrumentMap[instrumentVI]
+let p=purposeMap[purposeVI]
+
+let s=smart(p)
+
+let prompt=`${g} instrumental lofi beat,
+
+main melody: ${i} with ${rand(hook)},
+
+drum: ${s.drum},
+texture: ${rand(texture)},
+ambience: ${s.ambience},
+
+tempo: ${s.tempo},
+
+emotion: ${rand(emotion)},
+scene: ${rand(story)},
+
+structure:
+- melody comes early
+- subtle variation every 30 seconds
+- emotional peak
+- smooth loop
+
+background music for ${p},
+immersive, no vocals`
 
 document.getElementById("result").value=prompt
+}
 
+// ===== RANDOM PRO =====
+
+function randomPrompt(){
+
+let g=rand(Object.values(genreMap))
+let i=rand(Object.values(instrumentMap))
+let p=rand(Object.values(purposeMap))
+
+let s=smart(p)
+
+let prompt=`${g} instrumental lofi beat,
+
+main melody: ${i} with ${rand(hook)},
+
+drum: ${s.drum},
+texture: ${rand(texture)},
+ambience: ${s.ambience},
+
+tempo: ${s.tempo},
+
+emotion: ${rand(emotion)},
+scene: ${rand(story)},
+
+structure:
+- melody comes early
+- subtle variation every 30 seconds
+- emotional peak
+- smooth loop
+
+background music for ${p},
+immersive, no vocals`
+
+document.getElementById("result").value=prompt
 }
 
 </script>
