@@ -48,20 +48,19 @@ background:#555;
 
 <h2>🎧 LOFI PROMPT GENERATOR PRO</h2>
 
-<!-- UI TIẾNG VIỆT -->
 <select id="genre"></select><br>
 <select id="instrument"></select><br>
 <select id="purpose"></select><br>
 
 <button onclick="generatePrompt()">Tạo Prompt</button>
 <button onclick="randomPrompt()">Random Pro</button>
+<button onclick="copyPrompt()">📋 Copy</button>
 
-<textarea id="result"></textarea>
+<textarea id="result" placeholder="Prompt sẽ hiện ở đây..."></textarea>
 
 <script>
 
-// ===== MAP VIỆT → ANH =====
-
+// ===== MAP =====
 const genreMap={
 "Lofi chill":"lofi chill beat",
 "Lofi hip hop":"lofi hip hop beat",
@@ -87,8 +86,7 @@ const purposeMap={
 "Tập trung":"focus work"
 }
 
-// ===== RANDOM DATA =====
-
+// ===== DATA =====
 const hook=[
 "simple repeating piano motif",
 "soft emotional chord loop",
@@ -132,13 +130,14 @@ const story=[
 ]
 
 // ===== LOAD SELECT =====
-
 function loadSelect(id,data){
 let select=document.getElementById(id)
-Object.keys(data).forEach(key=>{
+select.innerHTML=""
+Object.keys(data).forEach((key,index)=>{
 let option=document.createElement("option")
 option.value=key
 option.text=key
+if(index===0) option.selected=true
 select.appendChild(option)
 })
 }
@@ -148,13 +147,11 @@ loadSelect("instrument",instrumentMap)
 loadSelect("purpose",purposeMap)
 
 // ===== RANDOM =====
-
 function rand(arr){
 return arr[Math.floor(Math.random()*arr.length)]
 }
 
-// ===== SMART LOGIC =====
-
+// ===== SMART =====
 function smart(purpose){
 
 if(purpose==="sleeping"){
@@ -181,16 +178,11 @@ ambience:rand(ambience)
 }
 
 // ===== GENERATE =====
-
 function generatePrompt(){
 
-let genreVI=document.getElementById("genre").value
-let instrumentVI=document.getElementById("instrument").value
-let purposeVI=document.getElementById("purpose").value
-
-let g=genreMap[genreVI]
-let i=instrumentMap[instrumentVI]
-let p=purposeMap[purposeVI]
+let g=genreMap[document.getElementById("genre").value]
+let i=instrumentMap[document.getElementById("instrument").value]
+let p=purposeMap[document.getElementById("purpose").value]
 
 let s=smart(p)
 
@@ -219,8 +211,7 @@ immersive, no vocals`
 document.getElementById("result").value=prompt
 }
 
-// ===== RANDOM PRO =====
-
+// ===== RANDOM FULL =====
 function randomPrompt(){
 
 let g=rand(Object.values(genreMap))
@@ -252,6 +243,17 @@ background music for ${p},
 immersive, no vocals`
 
 document.getElementById("result").value=prompt
+}
+
+// ===== COPY =====
+function copyPrompt(){
+let text=document.getElementById("result").value
+if(!text){
+alert("Chưa có prompt!")
+return
+}
+navigator.clipboard.writeText(text)
+alert("Đã copy!")
 }
 
 </script>
